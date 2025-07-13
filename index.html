@@ -6,7 +6,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-SYD9M50FW0');
     </script>
     <meta charset="UTF-8"/>
@@ -82,6 +81,18 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        #download-ical {
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +102,9 @@
 
     <h2>Nadchodzące niedziele handlowe:</h2>
     <ul id="upcoming"></ul>
+    <div>
+        <button id="download-ical">📅 Pobierz kalendarz (.ics)</button>
+    </div>
 </main>
 
 <footer>
@@ -142,6 +156,40 @@
         const li = document.createElement("li");
         li.textContent = formatted;
         upcomingEl.appendChild(li);
+    }
+
+    document.getElementById("download-ical").addEventListener("click", () => {
+        const events = tradingSundays2025.map(date => {
+            return `
+BEGIN:VEVENT
+DTSTAMP:${formatICalDate(new Date())}
+UID:${date}@niedziela-handlowa
+DTSTART;VALUE=DATE:${date.replace(/-/g, '')}
+SUMMARY:Niedziela handlowa
+TRANSP:TRANSPARENT
+END:VEVENT`.trim();
+        }).join("\n");
+
+        const ical = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+PRODID:-//pivovarit/niedziela-handlowa
+METHOD:PUBLISH
+${events}
+END:VCALENDAR`;
+
+        const blob = new Blob([ical], { type: 'text/calendar' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "niedziele-handlowe-2025.ics";
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    function formatICalDate(date) {
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
     }
 </script>
 </body>

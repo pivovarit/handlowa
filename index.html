@@ -4,7 +4,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYD9M50FW0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
         gtag('config', 'G-SYD9M50FW0');
     </script>
@@ -123,6 +127,19 @@
         "2025-12-21"
     ];
 
+    const tradingSundays2026 = [
+        "2026-01-25",
+        "2026-03-29",
+        "2026-04-26",
+        "2026-06-28",
+        "2026-08-30",
+        "2026-12-06",
+        "2026-12-13",
+        "2026-12-20"
+    ];
+
+    const allTradingSundays = [...tradingSundays2025, ...tradingSundays2026];
+
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
     const isSunday = today.getDay() === 0;
@@ -130,7 +147,7 @@
     const resultEl = document.getElementById("result");
     const upcomingEl = document.getElementById("upcoming");
 
-    if (isSunday && tradingSundays2025.includes(todayStr)) {
+    if (isSunday && allTradingSundays.includes(todayStr)) {
         resultEl.textContent = "TAK! 🛒";
         resultEl.classList.add("yes");
     } else if (isSunday) {
@@ -141,12 +158,25 @@
         resultEl.classList.add("no");
     }
 
-    const futureSundays = tradingSundays2025
+    const futureSundays = allTradingSundays
         .filter(dateStr => dateStr > todayStr)
-        .slice(0, 5);
+        .slice(0, 10);
 
+    let lastYear = null;
     for (const date of futureSundays) {
         const d = new Date(date);
+        const year = d.getFullYear();
+
+        if (lastYear !== null && year !== lastYear) {
+            const separatorLi = document.createElement("li");
+            separatorLi.textContent = ``;
+            separatorLi.style.fontWeight = "bold";
+            separatorLi.style.margin = "1rem 0 0.5rem";
+            separatorLi.style.listStyle = "none";
+            upcomingEl.appendChild(separatorLi);
+        }
+        lastYear = year;
+
         const formatted = d.toLocaleDateString("pl-PL", {
             weekday: "long",
             year: "numeric",
@@ -159,12 +189,13 @@
     }
 
     document.getElementById("download-ical").addEventListener("click", () => {
-        const events = tradingSundays2025.map(date => {
+        const events = allTradingSundays.map(date => {
             return `
 BEGIN:VEVENT
 DTSTAMP:${formatICalDate(new Date())}
 UID:${date}@niedziela-handlowa
 DTSTART;VALUE=DATE:${date.replace(/-/g, '')}
+DTEND;VALUE=DATE:${addOneDay(date).replace(/-/g, '')}
 SUMMARY:Niedziela handlowa
 TRANSP:TRANSPARENT
 END:VEVENT`.trim();
@@ -178,18 +209,24 @@ METHOD:PUBLISH
 ${events}
 END:VCALENDAR`;
 
-        const blob = new Blob([ical], { type: 'text/calendar' });
+        const blob = new Blob([ical], {type: 'text/calendar'});
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement("a");
         a.href = url;
-        a.download = "niedziele-handlowe-2025.ics";
+        a.download = "niedziele-handlowe-2025-2026.ics";
         a.click();
         URL.revokeObjectURL(url);
     });
 
     function formatICalDate(date) {
         return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    }
+
+    function addOneDay(dateStr) {
+        const d = new Date(dateStr);
+        d.setDate(d.getDate() + 1);
+        return d.toISOString().split("T")[0];
     }
 </script>
 </body>

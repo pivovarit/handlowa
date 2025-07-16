@@ -40,6 +40,10 @@
             margin-bottom: 1rem;
         }
 
+        h2 {
+            margin-top: 6rem;
+        }
+
         .result {
             font-size: 1.5rem;
             font-weight: bold;
@@ -97,15 +101,29 @@
             cursor: pointer;
             display: inline-block;
         }
+
+        #next-sunday {
+            margin: 1rem auto;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
 <main>
     <h1>Czy dzisiaj jest niedziela handlowa?</h1>
     <div id="result" class="result">Sprawdzanie…</div>
+    <div id="next-sunday"></div>
 
     <h2>Nadchodzące niedziele handlowe:</h2>
     <ul id="upcoming"></ul>
+
     <div>
         <button id="download-ical">📅 Pobierz kalendarz (.ics)</button>
     </div>
@@ -118,24 +136,13 @@
 
 <script>
     const tradingSundays2025 = [
-        "2025-01-26",
-        "2025-03-30",
-        "2025-04-27",
-        "2025-06-29",
-        "2025-08-31",
-        "2025-12-14",
-        "2025-12-21"
+        "2025-01-26", "2025-03-30", "2025-04-27", "2025-06-29",
+        "2025-08-31", "2025-12-14", "2025-12-21"
     ];
 
     const tradingSundays2026 = [
-        "2026-01-25",
-        "2026-03-29",
-        "2026-04-26",
-        "2026-06-28",
-        "2026-08-30",
-        "2026-12-06",
-        "2026-12-13",
-        "2026-12-20"
+        "2026-01-25", "2026-03-29", "2026-04-26", "2026-06-28",
+        "2026-08-30", "2026-12-06", "2026-12-13", "2026-12-20"
     ];
 
     const allTradingSundays = [...tradingSundays2025, ...tradingSundays2026];
@@ -146,6 +153,7 @@
 
     const resultEl = document.getElementById("result");
     const upcomingEl = document.getElementById("upcoming");
+    const nextSundayEl = document.getElementById("next-sunday");
 
     if (isSunday && allTradingSundays.includes(todayStr)) {
         resultEl.textContent = "TAK! 🛒";
@@ -158,18 +166,24 @@
         resultEl.classList.add("no");
     }
 
-    const futureSundays = allTradingSundays
-        .filter(dateStr => dateStr > todayStr)
-        .slice(0, 10);
+    const nextTradingSunday = allTradingSundays.find(date => date > todayStr);
+    if (nextTradingSunday) {
+        const formatted = new Date(nextTradingSunday).toLocaleDateString("pl-PL", {
+            weekday: "long", year: "numeric", month: "long", day: "numeric"
+        });
+        nextSundayEl.innerHTML = `🗓️ Następna niedziela handlowa: <span class="highlight">${formatted}</span>`;
+    }
 
+    const futureSundays = allTradingSundays.filter(date => date > todayStr).slice(0, 10);
     let lastYear = null;
+
     for (const date of futureSundays) {
         const d = new Date(date);
         const year = d.getFullYear();
 
         if (lastYear !== null && year !== lastYear) {
             const separatorLi = document.createElement("li");
-            separatorLi.textContent = ``;
+            separatorLi.textContent = "";
             separatorLi.style.fontWeight = "bold";
             separatorLi.style.margin = "1rem 0 0.5rem";
             separatorLi.style.listStyle = "none";
@@ -178,13 +192,12 @@
         lastYear = year;
 
         const formatted = d.toLocaleDateString("pl-PL", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
+            weekday: "long", year: "numeric", month: "long", day: "numeric"
         });
+
         const li = document.createElement("li");
         li.textContent = formatted;
+
         upcomingEl.appendChild(li);
     }
 

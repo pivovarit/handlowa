@@ -4,14 +4,16 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Czy dzisiaj jest niedziela handlowa? | CzyDzisiajOtwarte.pl</title>
-    <meta name="description" content="Sprawdź, czy dzisiaj sklepy są otwarte. Kalendarz niedziel handlowych 2025 i 2026. Dowiedz się, kiedy zrobisz zakupy w niedzielę." />
-    <meta name="robots" content="index, follow" />
+    <meta name="description"
+          content="Sprawdź, czy dzisiaj sklepy są otwarte. Kalendarz niedziel handlowych 2025 i 2026. Dowiedz się, kiedy zrobisz zakupy w niedzielę."/>
+    <meta name="robots" content="index, follow"/>
 
-    <meta property="og:title" content="Czy dzisiaj jest niedziela handlowa?" />
-    <meta property="og:description" content="Zobacz kalendarz niedziel handlowych na 2025 i 2026 rok. Sprawdź, czy dziś zrobisz zakupy!" />
-    <meta property="og:url" content="https://czydzisiajotwarte.pl" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://czydzisiajotwarte.pl/og-banner.jpg" />
+    <meta property="og:title" content="Czy dzisiaj jest niedziela handlowa?"/>
+    <meta property="og:description"
+          content="Zobacz kalendarz niedziel handlowych na 2025 i 2026 rok. Sprawdź, czy dziś zrobisz zakupy!"/>
+    <meta property="og:url" content="https://czydzisiajotwarte.pl"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="https://czydzisiajotwarte.pl/og-banner.jpg"/>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYD9M50FW0"></script>
     <script>
@@ -207,17 +209,36 @@
         resultEl.textContent = "NIE. 💤";
         resultEl.classList.add("no");
     } else {
-        resultEl.textContent = "Dziś nie jest niedziela.";
+        const weekdayName = today.toLocaleDateString("pl-PL", {weekday: "long"});
+        resultEl.textContent = `Nie, dziś jest ${weekdayName}`;
         resultEl.classList.add("no");
-    }
 
-    const nextTradingSunday = allTradingSundays.find(date => date > todayStr);
-    if (nextTradingSunday) {
-        const formatted = new Date(nextTradingSunday).toLocaleDateString("pl-PL", {
+        const nextSunday = new Date(today);
+        nextSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
+        const nextSundayStr = nextSunday.toISOString().split("T")[0];
+
+        const isNextSundayTrading = allTradingSundays.includes(nextSundayStr);
+        const formattedNext = nextSunday.toLocaleDateString("pl-PL", {
             weekday: "long", year: "numeric", month: "long", day: "numeric"
         });
-        nextSundayEl.innerHTML = `🗓️ Następna niedziela handlowa: <span class="highlight">${formatted}</span>`;
+
+        const info = isNextSundayTrading
+            ? `Najbliższa niedziela (${formattedNext}) jest <span class="highlight">handlowa 🛒</span>.`
+            : `Najbliższa niedziela (${formattedNext}) <span class="highlight">nie jest handlowa 💤</span>.`;
+
+        const p = document.createElement("p");
+        p.innerHTML = info;
+        nextSundayEl.appendChild(p);
     }
+
+    const upcomingSunday = new Date(today);
+    upcomingSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
+    const upcomingSundayStr = upcomingSunday.toISOString().split("T")[0];
+    const isUpcomingSundayTrading = allTradingSundays.includes(upcomingSundayStr);
+
+    nextSundayEl.innerHTML = isUpcomingSundayTrading
+        ? `🗓️ Najbliższa niedziela jest <span class="highlight">handlowa 🛒</span>.`
+        : `🗓️ Najbliższa niedziela <span class="highlight">nie jest handlowa 💤</span>.`;
 
     const futureSundays = allTradingSundays.filter(date => date > todayStr).slice(0, 10);
     let lastYear = null;

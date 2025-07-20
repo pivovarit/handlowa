@@ -231,15 +231,6 @@
         nextSundayEl.appendChild(p);
     }
 
-    const upcomingSunday = new Date(today);
-    upcomingSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
-    const upcomingSundayStr = upcomingSunday.toISOString().split("T")[0];
-    const isUpcomingSundayTrading = allTradingSundays.includes(upcomingSundayStr);
-
-    nextSundayEl.innerHTML = isUpcomingSundayTrading
-        ? `🗓️ Najbliższa niedziela jest <span class="highlight">handlowa 🛒</span>.`
-        : `🗓️ Najbliższa niedziela <span class="highlight">nie jest handlowa 💤</span>.`;
-
     const futureSundays = allTradingSundays.filter(date => date > todayStr).slice(0, 10);
     let lastYear = null;
 

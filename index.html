@@ -114,6 +114,12 @@
             display: inline-block;
         }
 
+        #current-time {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: #888;
+        }
+
         #next-sunday {
             margin: 1rem auto;
             font-size: 1.2rem;
@@ -182,6 +188,7 @@
 <body>
 <main>
     <h1>Czy dzisiaj jest niedziela handlowa?</h1>
+    <div id="current-time"></div>
     <div id="result" class="result" aria-live="polite">Sprawdzanie…</div>
     <div id="next-sunday" aria-live="polite"></div>
 
@@ -236,8 +243,12 @@
     const allTradingSundays = [...tradingSundays2025, ...tradingSundays2026];
 
     const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
+    const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
     const isSunday = today.getDay() === 0;
+
+    document.getElementById("current-time").textContent = today.toLocaleString("pl-PL", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
 
     const resultEl = document.getElementById("result");
     const upcomingEl = document.getElementById("upcoming");
@@ -256,7 +267,7 @@
 
         const nextSunday = new Date(today);
         nextSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
-        const nextSundayStr = nextSunday.toISOString().split("T")[0];
+        const nextSundayStr = nextSunday.getFullYear() + "-" + String(nextSunday.getMonth() + 1).padStart(2, "0") + "-" + String(nextSunday.getDate()).padStart(2, "0");
 
         const isNextSundayTrading = allTradingSundays.includes(nextSundayStr);
         const formattedNext = nextSunday.toLocaleDateString("pl-PL", {
@@ -275,7 +286,7 @@
 
     const upcomingSunday = new Date(today);
     upcomingSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
-    const upcomingSundayStr = upcomingSunday.toISOString().split("T")[0];
+    const upcomingSundayStr = upcomingSunday.getFullYear() + "-" + String(upcomingSunday.getMonth() + 1).padStart(2, "0") + "-" + String(upcomingSunday.getDate()).padStart(2, "0");
     const isUpcomingSundayTrading = allTradingSundays.includes(upcomingSundayStr);
 
     nextSundayEl.textContent = "";

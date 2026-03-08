@@ -26,9 +26,6 @@
         gtag('js', new Date());
         gtag('config', 'G-SYD9M50FW0');
     </script>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Czy dzisiaj jest niedziela handlowa?</title>
     <style>
         * {
             box-sizing: border-box;
@@ -222,12 +219,13 @@
             weekday: "long", year: "numeric", month: "long", day: "numeric"
         });
 
-        const info = isNextSundayTrading
-            ? `Najbliższa niedziela (${formattedNext}) jest <span class="highlight">handlowa 🛒</span>.`
-            : `Najbliższa niedziela (${formattedNext}) <span class="highlight">nie jest handlowa 💤</span>.`;
-
         const p = document.createElement("p");
-        p.innerHTML = info;
+        p.appendChild(document.createTextNode(`Najbliższa niedziela (${formattedNext}) `));
+        const span = document.createElement("span");
+        span.className = "highlight";
+        span.textContent = isNextSundayTrading ? "jest handlowa 🛒" : "nie jest handlowa 💤";
+        p.appendChild(span);
+        p.appendChild(document.createTextNode("."));
         nextSundayEl.appendChild(p);
     }
 
@@ -236,9 +234,15 @@
     const upcomingSundayStr = upcomingSunday.toISOString().split("T")[0];
     const isUpcomingSundayTrading = allTradingSundays.includes(upcomingSundayStr);
 
-    nextSundayEl.innerHTML = isUpcomingSundayTrading
-        ? `🗓️ Najbliższa niedziela jest <span class="highlight">handlowa 🛒</span>.`
-        : `🗓️ Najbliższa niedziela <span class="highlight">nie jest handlowa 💤</span>.`;
+    nextSundayEl.textContent = "";
+    nextSundayEl.appendChild(document.createTextNode(isUpcomingSundayTrading
+        ? "🗓️ Najbliższa niedziela jest "
+        : "🗓️ Najbliższa niedziela "));
+    const highlightSpan = document.createElement("span");
+    highlightSpan.className = "highlight";
+    highlightSpan.textContent = isUpcomingSundayTrading ? "handlowa 🛒" : "nie jest handlowa 💤";
+    nextSundayEl.appendChild(highlightSpan);
+    nextSundayEl.appendChild(document.createTextNode("."));
 
     const futureSundays = allTradingSundays.filter(date => date > todayStr).slice(0, 10);
     let lastYear = null;

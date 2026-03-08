@@ -44,7 +44,7 @@
             font-family: sans-serif;
             text-align: center;
             background-color: #f2f2f2;
-            padding: 2rem;
+            padding: 0;
         }
 
         h1 {
@@ -53,7 +53,7 @@
         }
 
         h2 {
-            margin-top: 6rem;
+            margin-top: 2rem;
         }
 
         .result {
@@ -92,6 +92,27 @@
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            position: relative;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 4rem;
+            font-size: 2.5rem;
+            color: #999;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: opacity 0.3s;
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
         }
 
         footer {
@@ -201,6 +222,7 @@
         <div id="current-time"></div>
         <div id="result" class="result" aria-live="polite">Sprawdzanie…</div>
         <div id="next-sunday" aria-live="polite"></div>
+        <div class="scroll-hint" onclick="this.parentElement.nextElementSibling.scrollIntoView({behavior:'smooth'})">▼</div>
     </div>
 
     <h2>Nadchodzące niedziele handlowe:</h2>
@@ -257,6 +279,11 @@
     const today = new Date();
     const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
     const isSunday = today.getDay() === 0;
+
+    const scrollHintEl = document.querySelector(".scroll-hint");
+    window.addEventListener("scroll", () => {
+        scrollHintEl.classList.toggle("hidden", window.scrollY > 50);
+    });
 
     document.getElementById("current-time").textContent = today.toLocaleString("pl-PL", {
         weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"

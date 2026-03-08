@@ -7,6 +7,7 @@
     <meta name="description"
           content="Sprawdź, czy dzisiaj sklepy są otwarte. Kalendarz niedziel handlowych 2025 i 2026. Dowiedz się, kiedy zrobisz zakupy w niedzielę."/>
     <meta name="robots" content="index, follow"/>
+    <link rel="canonical" href="https://czydzisiajotwarte.pl/"/>
 
     <meta property="og:title" content="Czy dzisiaj jest niedziela handlowa?"/>
     <meta property="og:description"
@@ -124,6 +125,17 @@
             font-weight: bold;
             color: #007bff;
         }
+
+        section {
+            max-width: 600px;
+            margin: 4rem auto 0;
+            text-align: left;
+        }
+
+        section p {
+            line-height: 1.6;
+            color: #444;
+        }
     </style>
     <script type="application/ld+json">
         {
@@ -132,10 +144,18 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "Czy 21 lipca 2025 to niedziela handlowa?",
+                    "name": "Czym jest niedziela handlowa?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Nie, 21 lipca 2025 nie jest niedzielą handlową."
+                        "text": "Niedziela handlowa to wyznaczony dzień, w który sklepy i galerie handlowe mogą być otwarte pomimo ogólnego zakazu handlu w niedziele. W Polsce obowiązuje ustawa o ograniczeniu handlu w niedziele i święta, która dopuszcza handel tylko w kilka wybranych niedziel w roku."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Ile jest niedziel handlowych w roku?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Liczba niedziel handlowych zależy od roku. W 2025 roku jest 7 niedziel handlowych, a w 2026 roku — 8. Pełny kalendarz niedziel handlowych znajdziesz na stronie CzyDzisiajOtwarte.pl."
                     }
                 },
                 {
@@ -143,7 +163,7 @@
                     "name": "Dlaczego sklepy są zamknięte w niedzielę?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zgodnie z ustawą o ograniczeniu handlu w niedziele, większość sklepów w Polsce musi być zamknięta, z wyjątkiem wybranych dni w roku."
+                        "text": "Zgodnie z ustawą o ograniczeniu handlu w niedziele i święta (Dz.U. 2018 poz. 305), większość sklepów w Polsce musi być zamknięta w niedziele, z wyjątkiem kilku wybranych niedziel handlowych w roku. Zakaz nie dotyczy m.in. stacji benzynowych, aptek, kwiaciarni i sklepów internetowych."
                     }
                 },
                 {
@@ -151,7 +171,7 @@
                     "name": "Gdzie znajdę kalendarz niedziel handlowych?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Pełny kalendarz znajdziesz na stronie oraz możesz pobrać go jako plik .ics."
+                        "text": "Kalendarz niedziel handlowych na 2025 i 2026 rok znajdziesz na stronie CzyDzisiajOtwarte.pl. Możesz również pobrać go jako plik .ics do swojego kalendarza."
                     }
                 }
             ]
@@ -162,20 +182,76 @@
 <body>
 <main>
     <h1>Czy dzisiaj jest niedziela handlowa?</h1>
-    <div id="result" class="result">Sprawdzanie…</div>
-    <div id="next-sunday"></div>
+    <div id="result" class="result" aria-live="polite">Sprawdzanie…</div>
+    <div id="next-sunday" aria-live="polite"></div>
 
     <h2>Nadchodzące niedziele handlowe:</h2>
-    <ul id="upcoming"></ul>
+    <ul id="upcoming">
+        <noscript>
+            <li>26 stycznia 2025</li>
+            <li>30 marca 2025</li>
+            <li>27 kwietnia 2025</li>
+            <li>29 czerwca 2025</li>
+            <li>31 sierpnia 2025</li>
+            <li>14 grudnia 2025</li>
+            <li>21 grudnia 2025</li>
+            <li>25 stycznia 2026</li>
+            <li>29 marca 2026</li>
+            <li>26 kwietnia 2026</li>
+            <li>28 czerwca 2026</li>
+            <li>30 sierpnia 2026</li>
+            <li>6 grudnia 2026</li>
+            <li>13 grudnia 2026</li>
+            <li>20 grudnia 2026</li>
+        </noscript>
+    </ul>
 
     <div>
         <button id="download-ical">📅 Pobierz kalendarz (.ics)</button>
     </div>
+
+    <section>
+        <h2>Kalendarz niedziel handlowych 2025</h2>
+        <p>W 2025 roku wyznaczono <strong>7 niedziel handlowych</strong>:</p>
+        <ul>
+            <li>26 stycznia 2025</li>
+            <li>30 marca 2025</li>
+            <li>27 kwietnia 2025</li>
+            <li>29 czerwca 2025</li>
+            <li>31 sierpnia 2025</li>
+            <li>14 grudnia 2025</li>
+            <li>21 grudnia 2025</li>
+        </ul>
+
+        <h2>Kalendarz niedziel handlowych 2026</h2>
+        <p>W 2026 roku wyznaczono <strong>8 niedziel handlowych</strong>:</p>
+        <ul>
+            <li>25 stycznia 2026</li>
+            <li>29 marca 2026</li>
+            <li>26 kwietnia 2026</li>
+            <li>28 czerwca 2026</li>
+            <li>30 sierpnia 2026</li>
+            <li>6 grudnia 2026</li>
+            <li>13 grudnia 2026</li>
+            <li>20 grudnia 2026</li>
+        </ul>
+
+        <h2>Czym jest niedziela handlowa?</h2>
+        <p>
+            Niedziela handlowa to wyznaczony dzień, w który sklepy i galerie handlowe w Polsce mogą być otwarte
+            pomimo ogólnego zakazu handlu. Zakaz został wprowadzony ustawą o ograniczeniu handlu w niedziele
+            i święta (Dz.U. 2018 poz. 305), która weszła w życie 1 marca 2018 roku.
+        </p>
+        <p>
+            W ciągu roku obowiązuje kilka wyjątków — są to tak zwane <strong>niedziele handlowe</strong>,
+            w które sklepy mogą normalnie działać. Zakaz nie dotyczy m.in. stacji benzynowych, aptek,
+            kwiaciarni, piekarni ani sklepów internetowych.
+        </p>
+    </section>
 </main>
 
 <footer>
-    Made with ☕ by <a href="https://github.com/sponsors/pivovarit" target="_blank" rel="noopener">pivovarit — support on
-    GitHub Sponsors</a>
+    <div class="footer-main">Made with ☕ by <a href="https://github.com/sponsors/pivovarit" target="_blank" rel="noopener">pivovarit</a> — <a href="https://github.com/sponsors/pivovarit" target="_blank" rel="noopener">Support on GitHub Sponsors</a> — <a href="https://buymeacoffee.com/pivovarit" target="_blank" rel="noopener">Buy Me a Coffee</a></div>
 </footer>
 
 <script>

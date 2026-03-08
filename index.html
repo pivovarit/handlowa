@@ -82,6 +82,15 @@
 
         main {
             flex: 10;
+            padding: 0;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             padding: 2rem;
         }
 
@@ -102,7 +111,7 @@
             text-decoration: underline;
         }
 
-        #download-ical {
+        #download-ical, #add-to-gcal {
             margin-top: 1.5rem;
             padding: 0.5rem 1rem;
             font-size: 1rem;
@@ -187,10 +196,12 @@
 </head>
 <body>
 <main>
-    <h1>Czy dzisiaj jest niedziela handlowa?</h1>
-    <div id="current-time"></div>
-    <div id="result" class="result" aria-live="polite">Sprawdzanie…</div>
-    <div id="next-sunday" aria-live="polite"></div>
+    <div class="hero">
+        <h1>Czy dzisiaj jest niedziela handlowa?</h1>
+        <div id="current-time"></div>
+        <div id="result" class="result" aria-live="polite">Sprawdzanie…</div>
+        <div id="next-sunday" aria-live="polite"></div>
+    </div>
 
     <h2>Nadchodzące niedziele handlowe:</h2>
     <ul id="upcoming">
@@ -208,6 +219,7 @@
 
     <div>
         <button id="download-ical">📅 Pobierz kalendarz (.ics)</button>
+        <button id="add-to-gcal">📅 Dodaj do Google Calendar</button>
     </div>
 
     <section>
@@ -355,6 +367,18 @@ END:VCALENDAR`;
         a.download = "niedziele-handlowe-2025-2026.ics";
         a.click();
         URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("add-to-gcal").addEventListener("click", () => {
+        const nextTrading = allTradingSundays.find(date => date >= todayStr);
+        if (!nextTrading) return;
+        const dateCompact = nextTrading.replace(/-/g, "");
+        const nextDay = addOneDay(nextTrading).replace(/-/g, "");
+        const url = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+            + "&text=" + encodeURIComponent("Niedziela handlowa")
+            + "&dates=" + dateCompact + "/" + nextDay
+            + "&details=" + encodeURIComponent("Niedziela handlowa — sklepy otwarte. Źródło: czydzisiajotwarte.pl");
+        window.open(url, "_blank");
     });
 
     function formatICalDate(date) {
